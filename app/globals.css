@@ -534,7 +534,9 @@ th {
   font-weight: 700;
   display: flex;
   gap: 4px;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
 }
 .empty {
   padding: 38px;

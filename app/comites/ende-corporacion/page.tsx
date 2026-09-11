@@ -149,9 +149,7 @@ export default function Committee() {
                         {r[3]}
                       </Badge>
                     </td>
-                    <td>
-                      {r[4]} <ChevronRight size={14} />
-                    </td>
+                    <td>{r[4]}</td>
                   </tr>
                 ))}
               </tbody>
