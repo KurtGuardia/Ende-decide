@@ -1,19 +1,33 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import {
-  Shell,
-  Card,
-  PageTitle,
-  Badge,
-} from '@/components/ui'
+import { Shell, Card, PageTitle } from '@/components/ui'
 import { useDemo } from '@/lib/demo-store'
 import { useState } from 'react'
+import { Plus, Trash2 } from 'lucide-react'
 export default function DecisionForm() {
   const r = useRouter()
   const { register } = useDemo()
   const [toast, setToast] = useState('')
+  const [requiredDocuments, setRequiredDocuments] =
+    useState(['Contrato firmado'])
+  const updateDocument = (index: number, value: string) =>
+    setRequiredDocuments((documents) =>
+      documents.map((document, i) =>
+        i === index ? value : document,
+      ),
+    )
+  const addDocument = () =>
+    setRequiredDocuments((documents) => [...documents, ''])
+  const removeDocument = (index: number) =>
+    setRequiredDocuments((documents) =>
+      documents.filter((_, i) => i !== index),
+    )
   const submit = () => {
-    register()
+    register(
+      requiredDocuments
+        .map((document) => document.trim())
+        .filter(Boolean),
+    )
     setToast(
       'Decisión registrada exitosamente. Se creó el compromiso de seguimiento.',
     )
@@ -38,7 +52,7 @@ export default function DecisionForm() {
                 Renovable Oriente
               </h2>
               <p>
-                Comité ENDE Corporación　|　11 sep.
+                Comité ENDE Corporación　|　20 sep.
                 2026　|　Tema estratégico　|　Gerencia:
                 Generación
               </p>
@@ -50,7 +64,7 @@ export default function DecisionForm() {
           <div className='panel soft'>
             <b>Comité ENDE Corporación</b>
             <p>
-              Viernes, 11 de septiembre de 2026
+              Sábado, 20 de septiembre de 2026
               <br />
               09:00 - 12:00
               <br />
@@ -86,17 +100,70 @@ export default function DecisionForm() {
                 </select>
               </label>
               <label>
-                Fecha límite *
+                Fecha límite de cierre *
                 <input defaultValue='30/09/2026' />
               </label>
               <label className='half'>
                 Indicador de cumplimiento *
-                <input defaultValue='Hito técnico y administrativo completado' />
+                <input defaultValue='Etapa de generación renovable habilitada con requisitos validados' />
               </label>
-              <label>
-                Evidencia esperada *
-                <input defaultValue='Informe de cumplimiento y documentación de respaldo' />
-              </label>
+              <div className='required-documents wide'>
+                <div className='required-documents-heading'>
+                  <div>
+                    <label>
+                      Documentos obligatorios para validar
+                      el cierre *
+                    </label>
+                    <small>
+                      Defina cada respaldo que deberá
+                      cargarse durante el seguimiento.
+                    </small>
+                  </div>
+                </div>
+                <div className='required-document-list'>
+                  {requiredDocuments.map(
+                    (document, index) => (
+                      <div
+                        className='required-document-row'
+                        key={index}
+                      >
+                        <input
+                          aria-label={`Documento obligatorio ${index + 1}`}
+                          value={document}
+                          onChange={(event) =>
+                            updateDocument(
+                              index,
+                              event.target.value,
+                            )
+                          }
+                          placeholder='Ej.: Contrato firmado'
+                        />
+                        <button
+                          type='button'
+                          className='icon-btn add-document'
+                          onClick={addDocument}
+                          aria-label='Agregar documento obligatorio'
+                        >
+                          <Plus size={17} />
+                        </button>
+                        <button
+                          type='button'
+                          className='icon-btn remove-document'
+                          onClick={() =>
+                            removeDocument(index)
+                          }
+                          disabled={
+                            requiredDocuments.length === 1
+                          }
+                          aria-label='Eliminar documento'
+                        >
+                          <Trash2 size={17} />
+                        </button>
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
               <label>
                 Prioridad *
                 <select defaultValue='Alta'>
@@ -159,7 +226,7 @@ export default function DecisionForm() {
               'Responsable asignado seleccionado',
               'Fecha límite definida',
               'Indicador de cumplimiento completado',
-              'Evidencia esperada completada',
+              'Documentos obligatorios definidos',
             ].map((x) => (
               <p className='check' key={x}>
                 ●　{x}

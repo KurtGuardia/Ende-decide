@@ -89,7 +89,7 @@ export default function Topic() {
           <div>
             <CalendarDays />
             　Fecha de registro
-            <strong>15 ago. 2026</strong>
+            <strong>16 sep. 2026</strong>
           </div>
           <div>
             <UserRoundCheck />
@@ -414,8 +414,8 @@ function Decision() {
             </p>
             <p>
               <b>Responsable:</b> Gerencia de Generación　{' '}
-              <b>Plazo:</b> 30 sep. 2026　 <b>Indicador:</b>{' '}
-              Hito técnico y administrativo completado
+              <b>Plazo de cierre:</b> 30 sep. 2026　 <b>Indicador:</b>{' '}
+              Etapa de generación renovable habilitada con requisitos validados
             </p>
           </>
         ) : (

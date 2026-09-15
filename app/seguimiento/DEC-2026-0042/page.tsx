@@ -11,11 +11,13 @@ import {
   getCommitmentStatus,
   useDemo,
 } from '@/lib/demo-store'
+import { DocumentPreview } from '@/components/assistive-modal'
 
 export default function Tracking() {
   const { state, progress, evidence, escalate, close } =
     useDemo()
   const [modal, setModal] = useState('')
+  const [preview, setPreview] = useState('')
   const [message, setMessage] = useState('')
   const closed = state.closed
   const status = getCommitmentStatus(state)
@@ -47,7 +49,7 @@ export default function Tracking() {
               <p>
                 Comité ENDE Corporación
                 <br />
-                Sesión del 11 de septiembre de 2026
+                Sesión del 20 de septiembre de 2026
               </p>
             </div>
             <div>
@@ -58,7 +60,7 @@ export default function Tracking() {
               Comité<strong>Comité ENDE Corporación</strong>
             </div>
             <div>
-              Fecha de decisión<strong>11 sep. 2026</strong>
+              Fecha de decisión<strong>20 sep. 2026</strong>
               <br />
               <br />
               Fecha límite<strong>30 sep. 2026</strong>
@@ -102,14 +104,7 @@ export default function Tracking() {
             >
               <i style={{ width: state.progress + '%' }} />
             </div>
-            <div
-              className='row'
-              style={{
-                justifyContent: 'space-between',
-                marginTop: 25,
-                textAlign: 'center',
-              }}
-            >
+            <div className='milestones'>
               {[
                 '✓ Decisión registrada',
                 '✓ Notificación enviada',
@@ -119,16 +114,18 @@ export default function Tracking() {
                   ? '✓ Validación completada'
                   : '○ Validación pendiente',
               ].map((x, i) => (
-                <span
+                <div
                   key={x}
-                  className={i < 4 || closed ? 'check' : ''}
+                  className={
+                    'milestone ' +
+                    (i < 4 || closed ? 'check' : '')
+                  }
                 >
-                  {x}
-                  <small style={{ display: 'block' }}>
-                    {' '}
-                    {11 + i * 3} sep. 2026
+                  <b>{x}</b>
+                  <small>
+                    {[20, 21, 24, 26, 30][i]} sep. 2026
                   </small>
-                </span>
+                </div>
               ))}
             </div>
           </div>
@@ -171,17 +168,27 @@ export default function Tracking() {
                   'Compromiso cumplido',
                 ]
               : [
-                  'Riesgo de incumplimiento',
+                  '🕒 Faltan 4 días para el comité',
                   'Recordatorio de carga de evidencia',
                   'Recordatorio de avance',
                   'Notificación de decisión',
                 ]
             ).map((x, i) => (
-              <div className='listitem' key={x}>
+              <div
+                className={
+                  'listitem ' +
+                  (i === 0 && !closed ? 'red-alert' : '')
+                }
+                key={x}
+              >
                 <span
                   className={
                     'dot ' +
-                    (closed ? 'green' : i ? 'amber' : '')
+                    (closed
+                      ? 'green'
+                      : i === 0
+                        ? 'red'
+                        : 'amber')
                   }
                 />
                 <span>
@@ -190,9 +197,11 @@ export default function Tracking() {
                   <small>
                     {closed
                       ? 'El registro fue consolidado en el expediente.'
-                      : i
-                        ? 'Se solicita actualizar información del compromiso.'
-                        : 'El avance requiere atención prioritaria.'}
+                      : i === 0
+                        ? 'Falta adjuntar el Contrato firmado para completar el expediente del comité.'
+                        : i
+                          ? 'Se solicita actualizar información del compromiso.'
+                          : 'El avance requiere atención prioritaria.'}
                   </small>
                 </span>
               </div>
@@ -205,8 +214,18 @@ export default function Tracking() {
               state.evidence.slice(0, 2).map((e) => (
                 <div
                   key={e.name}
-                  className='soft panel'
+                  className='soft panel evidence-link'
                   style={{ marginBottom: 8 }}
+                  role='button'
+                  tabIndex={0}
+                  onClick={() => setPreview(e.name)}
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === 'Enter' ||
+                      event.key === ' '
+                    )
+                      setPreview(e.name)
+                  }}
                 >
                   <b>PDF　{e.name}</b>
                   <br />
@@ -299,20 +318,20 @@ export default function Tracking() {
         <Modal
           type={modal}
           dismiss={() => setModal('')}
+          requiredDocuments={state.requiredDocuments}
+          initialProgress={state.progress}
           done={(p?: number, n?: string) => {
             if (modal === 'progress')
               act(
-                () => progress(p || 75, n || ''),
+                () => progress(p ?? 65, n || ''),
                 'Avance actualizado.',
               )
             if (modal === 'evidence')
               act(
                 () =>
                   evidence({
-                    name:
-                      n ||
-                      'Evidencia_cumplimiento_septiembre.pdf',
-                    date: '08 sep. 2026',
+                    name: n || 'Contrato firmado_sept.pdf',
+                    date: '26 sep. 2026',
                     note: 'Documentación de respaldo cargada durante la demo.',
                     author: 'María Fernández',
                   }),
@@ -331,6 +350,12 @@ export default function Tracking() {
           }}
         />
       )}
+      {preview && (
+        <DocumentPreview
+          title={preview}
+          onClose={() => setPreview('')}
+        />
+      )}
     </Shell>
   )
 }
@@ -339,16 +364,22 @@ function Modal({
   type,
   dismiss,
   done,
+  requiredDocuments,
+  initialProgress,
 }: {
   type: string
   dismiss: () => void
   done: (p?: number, n?: string) => void
+  requiredDocuments: string[]
+  initialProgress: number
 }) {
   const [n, setN] = useState('')
   const [file, setFile] = useState(
-    'Evidencia_cumplimiento_septiembre.pdf',
+    'Contrato firmado_sept.pdf',
   )
-  const [p, setP] = useState(75)
+  const [p, setP] = useState(initialProgress || 65)
+  const [selectedDocument, setSelectedDocument] =
+    useState('')
   const title =
     type === 'progress'
       ? 'Registrar avance'
@@ -362,16 +393,41 @@ function Modal({
       <div className='modal'>
         <h2>{title}</h2>
         {type === 'progress' && (
-          <label>
-            Porcentaje de avance
-            <input
-              type='number'
-              min='0'
-              max='99'
-              value={p}
-              onChange={(e) => setP(+e.target.value)}
-            />
-          </label>
+          <>
+            <label>
+              Documento obligatorio asociado
+              <select
+                value={selectedDocument}
+                onChange={(event) => {
+                  setSelectedDocument(event.target.value)
+                  if (event.target.value) setP(80)
+                }}
+              >
+                <option value=''>
+                  Seleccione un documento
+                </option>
+                {requiredDocuments.map((document) => (
+                  <option key={document} value={document}>
+                    {document}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Porcentaje de avance
+              <input
+                type='number'
+                min='0'
+                max='99'
+                value={p}
+                onChange={(e) => setP(+e.target.value)}
+              />
+              <small className='field-help'>
+                Al seleccionar un documento obligatorio, el
+                avance se actualiza a 80%.
+              </small>
+            </label>
+          </>
         )}
         {type === 'evidence' && (
           <label>
@@ -409,7 +465,14 @@ function Modal({
               (type === 'escalate' ? 'danger' : 'primary')
             }
             onClick={() =>
-              done(p, type === 'evidence' ? file : n)
+              done(
+                p,
+                type === 'evidence'
+                  ? file
+                  : selectedDocument
+                    ? `Avance reportado con ${selectedDocument}. ${n}`
+                    : n,
+              )
             }
           >
             {type === 'close'
