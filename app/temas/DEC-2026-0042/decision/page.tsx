@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { Shell, Card, PageTitle } from '@/components/ui'
 import { useDemo } from '@/lib/demo-store'
 import { useState } from 'react'
-import { Plus, Trash2 } from 'lucide-react'
+import { Building2, CalendarDays, FileText, Plus, Trash2 } from 'lucide-react'
 export default function DecisionForm() {
   const r = useRouter()
   const { register } = useDemo()
@@ -44,20 +44,19 @@ export default function DecisionForm() {
       />
       <div className='hero'>
         <Card>
-          <div className='decisioninfo'>
-            <span>▤</span>
-            <div>
-              <h2 style={{ margin: 0 }}>
-                DEC-2026-0042 · Proyecto de Generación
-                Renovable Oriente
-              </h2>
-              <p>
-                Comité ENDE Corporación　|　20 sep.
-                2026　|　Tema estratégico　|　Gerencia:
-                Generación
-              </p>
+          <div className='decisioninfo decision-context'>
+            <div className='decision-context-icon' aria-hidden='true'>
+              <FileText size={32} />
             </div>
-            <span />
+            <div className='decision-context-content'>
+              <b className='decision-code'>DEC-2026-0042</b>
+              <h2>Proyecto de Generación Renovable Oriente</h2>
+              <div className='decision-context-meta'>
+                <span><Building2 size={15} /> Gerencia de Generación</span>
+                <span><CalendarDays size={15} /> Comité · 20 sep. 2026</span>
+                <span>Tema estratégico</span>
+              </div>
+            </div>
           </div>
         </Card>
         <Card title='Resumen del comité'>

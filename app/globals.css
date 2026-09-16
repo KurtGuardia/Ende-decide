@@ -592,6 +592,29 @@ th {
   font-size: 17px;
   display: block;
 }
+.decision-context {
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  min-height: 178px;
+  padding: 26px 28px;
+}
+.decision-context-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #0872cf;
+  background: #eaf5ff;
+  border: 1px solid #c5e0f7;
+}
+.decision-context-content { min-width: 0; }
+.decision-code { color: #2164ac; font-size: 13px; letter-spacing: .02em; }
+.decision-context h2 { margin: 5px 0 14px; max-width: 640px; font-size: 23px; line-height: 1.2; }
+.decision-context-meta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: #456a9f; font-size: 13px; }
+.decision-context-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.risk-table th:nth-child(n+2), .risk-table td:nth-child(n+2) { text-align: center; white-space: nowrap; }
 .formcard {
   padding: 22px;
 }
@@ -1299,6 +1322,15 @@ textarea {
   .hero > .card:first-child .decisioninfo > div {
     align-items: flex-start;
   }
+  .hero > .card:first-child .decision-context {
+    grid-template-columns: 58px minmax(0, 1fr) !important;
+    gap: 14px;
+    padding: 20px 18px;
+    min-height: 0;
+  }
+  .decision-context-icon { width: 54px; height: 54px; }
+  .decision-context h2 { font-size: 19px; margin: 4px 0 10px; }
+  .decision-context-meta { gap: 6px 12px; font-size: 12px; }
   .formactions {
     flex-direction: column;
     gap: 10px;

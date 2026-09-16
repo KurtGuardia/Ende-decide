@@ -222,6 +222,14 @@ function Summary() {
         <Card title='Riesgos clave'>
           <div className='tablewrap'>
             <table className='risk-table'>
+              <thead>
+                <tr>
+                  <th>Riesgo</th>
+                  <th>Impacto</th>
+                  <th>Probabilidad</th>
+                  <th>Nivel</th>
+                </tr>
+              </thead>
               <tbody>
                 {[
                   'Retraso en permisos ambientales|Alto|Media|Alto',
