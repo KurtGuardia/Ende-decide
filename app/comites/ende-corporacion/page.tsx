@@ -65,8 +65,8 @@ export default function Committee() {
           [
             CalendarDays,
             'Fecha de la reunión',
-            'Sáb 20',
-            'septiembre 2026',
+            'Mar 27',
+            'octubre 2026',
           ],
           [
             Clock3,

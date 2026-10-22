@@ -53,7 +53,7 @@ export default function DecisionForm() {
               <h2>Proyecto de Generación Renovable Oriente</h2>
               <div className='decision-context-meta'>
                 <span><Building2 size={15} /> Gerencia de Generación</span>
-                <span><CalendarDays size={15} /> Comité · 20 sep. 2026</span>
+                <span><CalendarDays size={15} /> Comité · 27 oct. 2026</span>
                 <span>Tema estratégico</span>
               </div>
             </div>
@@ -63,7 +63,7 @@ export default function DecisionForm() {
           <div className='panel soft'>
             <b>Comité ENDE Corporación</b>
             <p>
-              Sábado, 20 de septiembre de 2026
+              Martes, 27 de octubre de 2026
               <br />
               09:00 - 12:00
               <br />
@@ -100,7 +100,7 @@ export default function DecisionForm() {
               </label>
               <label>
                 Fecha límite de cierre *
-                <input defaultValue='30/09/2026' />
+                <input defaultValue='13/11/2026' />
               </label>
               <label className='half'>
                 Indicador de cumplimiento *

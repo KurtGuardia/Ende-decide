@@ -6,7 +6,7 @@ export const topic = {
   committee: 'Comité ENDE Corporación',
   priority: 'Alta',
   responsible: 'María Fernández',
-  deadline: '30 sep. 2026',
+  deadline: '13 nov. 2026',
 }
 export const initialState: DemoState = {
   decisionRegistered: false,
@@ -23,7 +23,7 @@ export const initialState: DemoState = {
   events: [
     {
       id: 'topic-ready',
-      date: '16 sep. 2026 · 16:30',
+      date: '21 oct. 2026 · 16:30',
       title: 'Tema listo para comité',
       detail:
         'Los respaldos obligatorios fueron validados y el tema quedó disponible para agenda.',
@@ -31,7 +31,7 @@ export const initialState: DemoState = {
     },
     {
       id: 'documents-validated',
-      date: '16 sep. 2026 · 15:45',
+      date: '21 oct. 2026 · 15:45',
       title: 'Respaldos obligatorios validados',
       detail:
         'Se completó la revisión técnica, financiera, legal y de riesgos.',

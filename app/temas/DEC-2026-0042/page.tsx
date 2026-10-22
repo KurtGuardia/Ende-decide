@@ -89,7 +89,7 @@ export default function Topic() {
           <div>
             <CalendarDays />
             　Fecha de registro
-            <strong>16 sep. 2026</strong>
+            <strong>20 oct. 2026</strong>
           </div>
           <div>
             <UserRoundCheck />
@@ -383,7 +383,7 @@ function Documents() {
                       {d[2]}
                     </Badge>
                   </td>
-                  <td>{i + 1} ago. 2026</td>
+                  <td>{i + 13} oct. 2026</td>
                   <td>Secretaría Técnica</td>
                 </tr>
               ))}
@@ -422,7 +422,7 @@ function Decision() {
             </p>
             <p>
               <b>Responsable:</b> Gerencia de Generación　{' '}
-              <b>Plazo de cierre:</b> 30 sep. 2026　 <b>Indicador:</b>{' '}
+              <b>Plazo de cierre:</b> 13 nov. 2026　 <b>Indicador:</b>{' '}
               Etapa de generación renovable habilitada con requisitos validados
             </p>
           </>

@@ -49,7 +49,7 @@ export default function Tracking() {
               <p>
                 Comité ENDE Corporación
                 <br />
-                Sesión del 20 de septiembre de 2026
+                Sesión del 27 de octubre de 2026
               </p>
             </div>
             <div>
@@ -60,10 +60,10 @@ export default function Tracking() {
               Comité<strong>Comité ENDE Corporación</strong>
             </div>
             <div>
-              Fecha de decisión<strong>20 sep. 2026</strong>
+              Fecha de decisión<strong>27 oct. 2026</strong>
               <br />
               <br />
-              Fecha límite<strong>30 sep. 2026</strong>
+              Fecha límite<strong>13 nov. 2026</strong>
             </div>
           </div>
         </Card>
@@ -123,7 +123,7 @@ export default function Tracking() {
                 >
                   <b>{x}</b>
                   <small>
-                    {[20, 21, 24, 26, 30][i]} sep. 2026
+                    {['27 oct.', '28 oct.', '30 oct.', '06 nov.', '13 nov.'][i]} 2026
                   </small>
                 </div>
               ))}
@@ -168,7 +168,7 @@ export default function Tracking() {
                   'Compromiso cumplido',
                 ]
               : [
-                  '🕒 Faltan 4 días para el comité',
+                  '🕒 Faltan 5 días para el comité',
                   'Recordatorio de carga de evidencia',
                   'Recordatorio de avance',
                   'Notificación de decisión',
@@ -331,7 +331,7 @@ export default function Tracking() {
                 () =>
                   evidence({
                     name: n || 'Contrato firmado_sept.pdf',
-                    date: '26 sep. 2026',
+                    date: '06 nov. 2026',
                     note: 'Documentación de respaldo cargada durante la demo.',
                     author: 'María Fernández',
                   }),
