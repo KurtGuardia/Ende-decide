@@ -89,7 +89,7 @@ export default function Topic() {
           <div>
             <CalendarDays />
             　Fecha de registro
-            <strong>20 oct. 2026</strong>
+            <strong>{state.calendar.today}</strong>
           </div>
           <div>
             <UserRoundCheck />
@@ -342,6 +342,7 @@ function Checklist() {
 }
 
 function Documents() {
+  const { state } = useDemo()
   const [selected, setSelected] = useState<string | null>(
     null,
   )
@@ -383,7 +384,7 @@ function Documents() {
                       {d[2]}
                     </Badge>
                   </td>
-                  <td>{i + 13} oct. 2026</td>
+                  <td>{state.calendar.today}</td>
                   <td>Secretaría Técnica</td>
                 </tr>
               ))}
@@ -394,6 +395,7 @@ function Documents() {
       {selected && (
         <DocumentPreview
           title={selected}
+          date={state.calendar.today}
           onClose={() => setSelected(null)}
         />
       )}
@@ -422,7 +424,7 @@ function Decision() {
             </p>
             <p>
               <b>Responsable:</b> Gerencia de Generación　{' '}
-              <b>Plazo de cierre:</b> 13 nov. 2026　 <b>Indicador:</b>{' '}
+              <b>Plazo de cierre:</b> {state.calendar.deadline}　 <b>Indicador:</b>{' '}
               Etapa de generación renovable habilitada con requisitos validados
             </p>
           </>

@@ -21,6 +21,7 @@ import {
 } from '@/components/ui'
 import { AssistiveModal } from '@/components/assistive-modal'
 import { agenda } from '@/data/demo-data'
+import { useDemo } from '@/lib/demo-store'
 const people = [
   ['Juan Pérez', 'Presidente', 'Confirmado'],
   ['María González', 'Vicepresidente', 'Confirmado'],
@@ -45,6 +46,7 @@ const people = [
   ['Daniel Romero', 'Secretario Técnico', 'Pendiente'],
 ]
 export default function Committee() {
+  const { state } = useDemo()
   const [open, setOpen] = useState(false)
   const stat = (s: string) =>
     s === 'Confirmado' ? (
@@ -65,8 +67,8 @@ export default function Committee() {
           [
             CalendarDays,
             'Fecha de la reunión',
-            'Mar 27',
-            'octubre 2026',
+            `${state.calendar.committeeWeekday} ${state.calendar.committeeDay}`,
+            state.calendar.committeeMonthYear,
           ],
           [
             Clock3,
@@ -283,7 +285,7 @@ export default function Committee() {
         </Card>
       </div>
       {open && (
-        <AssistiveModal onClose={() => setOpen(false)} />
+        <AssistiveModal committeeDate={state.calendar.committeeLong} onClose={() => setOpen(false)} />
       )}
     </Shell>
   )

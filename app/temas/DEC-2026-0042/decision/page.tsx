@@ -6,8 +6,10 @@ import { useState } from 'react'
 import { Building2, CalendarDays, FileText, Plus, Trash2 } from 'lucide-react'
 export default function DecisionForm() {
   const r = useRouter()
-  const { register } = useDemo()
+  const { register, state } = useDemo()
   const [toast, setToast] = useState('')
+  const [deadlineEdit, setDeadlineEdit] = useState({ resetKey: state.resetKey, value: state.calendar.deadlineLong })
+  const deadline = deadlineEdit.resetKey === state.resetKey ? deadlineEdit.value : state.calendar.deadlineLong
   const [requiredDocuments, setRequiredDocuments] =
     useState(['Contrato firmado'])
   const updateDocument = (index: number, value: string) =>
@@ -53,7 +55,7 @@ export default function DecisionForm() {
               <h2>Proyecto de Generación Renovable Oriente</h2>
               <div className='decision-context-meta'>
                 <span><Building2 size={15} /> Gerencia de Generación</span>
-                <span><CalendarDays size={15} /> Comité · 27 oct. 2026</span>
+                <span><CalendarDays size={15} /> Comité · {state.calendar.committee}</span>
                 <span>Tema estratégico</span>
               </div>
             </div>
@@ -63,7 +65,7 @@ export default function DecisionForm() {
           <div className='panel soft'>
             <b>Comité ENDE Corporación</b>
             <p>
-              Martes, 27 de octubre de 2026
+              {state.calendar.committeeLong}
               <br />
               09:00 - 12:00
               <br />
@@ -100,7 +102,7 @@ export default function DecisionForm() {
               </label>
               <label>
                 Fecha límite de cierre *
-                <input defaultValue='13/11/2026' />
+                <input value={deadline} onChange={(event) => setDeadlineEdit({ resetKey: state.resetKey, value: event.target.value })} />
               </label>
               <label className='half'>
                 Indicador de cumplimiento *

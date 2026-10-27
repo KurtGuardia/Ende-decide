@@ -1,5 +1,5 @@
 'use client';
-import {createContext,useContext,useEffect,useState} from 'react'; import {DemoState,Evidence,TopicStatus,CommitmentStatus} from '@/types/demo'; import {initialState} from '@/data/demo-data';
+import {createContext,useContext,useEffect,useState} from 'react'; import {DemoState,Evidence,TopicStatus,CommitmentStatus} from '@/types/demo'; import {createInitialState,initialState} from '@/data/demo-data'; import {createDemoCalendar} from '@/lib/demo-calendar';
 type Ctx={state:DemoState; register:(requiredDocuments:string[])=>void; progress:(n:number,note:string)=>void; evidence:(e:Evidence)=>void; escalate:()=>void; close:()=>void; reset:()=>void};
 const C=createContext<Ctx|undefined>(undefined);
 const stamp=()=>new Date().toLocaleDateString('es-BO',{day:'2-digit',month:'short',year:'numeric'})+' · '+new Date().toLocaleTimeString('es-BO',{hour:'2-digit',minute:'2-digit'});
@@ -7,8 +7,8 @@ const event=(title:string,detail:string,actor='María Fernández')=>({id:`${Date
 export const getTopicStatus=(state:DemoState):TopicStatus=>state.closed?'Cerrado':state.decisionRegistered?'Decisión adoptada':'Listo para comité';
 export const getCommitmentStatus=(state:DemoState):CommitmentStatus=>state.closed?'Cumplido':state.decisionRegistered?'En riesgo':'Pendiente';
 export function DemoProvider({children}:{children:React.ReactNode}){const [state,setState]=useState(initialState);
-useEffect(()=>{const saved=localStorage.getItem('ende-demo');if(saved){try{// eslint-disable-next-line react-hooks/set-state-in-effect
-setState({...initialState,...JSON.parse(saved),requiredDocuments:JSON.parse(saved).requiredDocuments||initialState.requiredDocuments})}catch{localStorage.removeItem('ende-demo')}}},[]);
+useEffect(()=>{const saved=localStorage.getItem('ende-demo');if(saved){try{const parsed=JSON.parse(saved);// eslint-disable-next-line react-hooks/set-state-in-effect
+setState({...initialState,...parsed,calendar:createDemoCalendar(),resetKey:parsed.resetKey||initialState.resetKey,requiredDocuments:parsed.requiredDocuments||initialState.requiredDocuments})}catch{localStorage.removeItem('ende-demo')}}},[]);
 useEffect(()=>localStorage.setItem('ende-demo',JSON.stringify(state)),[state]);
 const value={state,
 register:(requiredDocuments:string[])=>setState(s=>s.decisionRegistered?s:({...s,decisionRegistered:true,progress:65,requiredDocuments:requiredDocuments.length?requiredDocuments:initialState.requiredDocuments,note:'Avance inicial registrado: se inició la ejecución de actividades técnicas y administrativas conforme al acuerdo del comité.',events:[event('Responsable notificado','La Gerencia de Generación recibió el compromiso, plazo, indicador y documentos obligatorios asignados.','Sistema'),event('Decisión registrada','Se aprobó la siguiente etapa del proyecto y se creó el compromiso de seguimiento con sus requisitos de validación.','Secretaría Técnica'),...s.events]})),
@@ -16,4 +16,4 @@ progress:(n:number,note:string)=>setState(s=>!s.decisionRegistered||s.closed?s:(
 evidence:(e:Evidence)=>setState(s=>!s.decisionRegistered||s.closed?s:({...s,evidence:[e,...s.evidence],events:[event('Evidencia cargada',`Se adjuntó ${e.name}.`),...s.events]})),
 escalate:()=>setState(s=>!s.decisionRegistered||s.closed?s:({...s,escalated:true,events:[event('Compromiso escalado','Se solicitó atención prioritaria al responsable y al comité.'),...s.events]})),
 close:()=>setState(s=>!s.decisionRegistered||s.closed?s:({...s,closed:true,progress:100,escalated:false,note:'Compromiso cumplido y evidencia validada por la instancia correspondiente.',events:[event('Cierre validado','La evidencia fue revisada y el compromiso fue validado como cumplido.','Instancia de validación'),...s.events]})),
-reset:()=>{localStorage.removeItem('ende-demo');setState(initialState)}};return <C.Provider value={value}>{children}</C.Provider>};export const useDemo=()=>{const c=useContext(C);if(!c)throw Error('DemoProvider');return c};
+reset:()=>{const freshState=createInitialState();localStorage.removeItem('ende-demo');setState(freshState)}};return <C.Provider value={value}>{children}</C.Provider>};export const useDemo=()=>{const c=useContext(C);if(!c)throw Error('DemoProvider');return c};

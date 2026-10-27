@@ -1,4 +1,23 @@
 import { DemoState } from '@/types/demo'
+import { createDemoCalendar } from '@/lib/demo-calendar'
+export const createInitialState = (): DemoState => {
+  const calendar = createDemoCalendar()
+  return {
+    decisionRegistered: false,
+    progress: 0,
+    closed: false,
+    escalated: false,
+    note: 'A la espera de la decisión del comité para iniciar el seguimiento.',
+    requiredDocuments: ['Contrato firmado', 'Propuesta técnica aprobada', 'Informe de cumplimiento'],
+    evidence: [],
+    calendar,
+    resetKey: `${Date.now()}`,
+    events: [
+      { id: 'topic-ready', date: `${calendar.today} · 16:30`, title: 'Tema listo para comité', detail: 'Los respaldos obligatorios fueron validados y el tema quedó disponible para agenda.', actor: 'Secretaría Técnica' },
+      { id: 'documents-validated', date: `${calendar.today} · 15:45`, title: 'Respaldos obligatorios validados', detail: 'Se completó la revisión técnica, financiera, legal y de riesgos.', actor: 'Secretaría Técnica' },
+    ],
+  }
+}
 export const topic = {
   id: 'DEC-2026-0042',
   title: 'Proyecto de Generación Renovable Oriente',
@@ -6,39 +25,9 @@ export const topic = {
   committee: 'Comité ENDE Corporación',
   priority: 'Alta',
   responsible: 'María Fernández',
-  deadline: '13 nov. 2026',
+  deadline: createDemoCalendar().deadline,
 }
-export const initialState: DemoState = {
-  decisionRegistered: false,
-  progress: 0,
-  closed: false,
-  escalated: false,
-  note: 'A la espera de la decisión del comité para iniciar el seguimiento.',
-  requiredDocuments: [
-    'Contrato firmado',
-    'Propuesta técnica aprobada',
-    'Informe de cumplimiento',
-  ],
-  evidence: [],
-  events: [
-    {
-      id: 'topic-ready',
-      date: '21 oct. 2026 · 16:30',
-      title: 'Tema listo para comité',
-      detail:
-        'Los respaldos obligatorios fueron validados y el tema quedó disponible para agenda.',
-      actor: 'Secretaría Técnica',
-    },
-    {
-      id: 'documents-validated',
-      date: '21 oct. 2026 · 15:45',
-      title: 'Respaldos obligatorios validados',
-      detail:
-        'Se completó la revisión técnica, financiera, legal y de riesgos.',
-      actor: 'Secretaría Técnica',
-    },
-  ],
-}
+export const initialState: DemoState = createInitialState()
 export const agenda = [
   [
     'DEC-2026-0042',
